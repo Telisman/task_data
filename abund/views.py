@@ -66,6 +66,7 @@ def home(request):
     # Find the domain with the highest average abundance
     domain_with_highest_average_abundance = average_abundance_by_domain.idxmax()
     highest_average_abundance = average_abundance_by_domain.max()
+    print(domain_with_highest_average_abundance)
 
 
     context = {
@@ -73,17 +74,19 @@ def home(request):
         'unique_mean_copy_number_count': unique_mean_copy_number_count,
         'unique_gene_copy_number_count': unique_gene_copy_number_count,
         'copy_number_stats': copy_number_stats,
-        # 'domain_with_highest_average_abundance': domain_with_highest_average_abundance,
-        # 'highest_average_abundance': highest_average_abundance,
-        # 'mean_table': mean_table,
+        'domain_with_highest_average_abundance': domain_with_highest_average_abundance,
+        'highest_average_abundance': highest_average_abundance,
+        'mean_table': mean_table,
         'gene_product_data': gene_product_data,
-        # 'std_table': std_table,
+        'std_table': std_table,
     }
 
     return render(request, 'home.html', context)
 
 def your_api_endpoint(request):
     df = pd.read_csv('9606_abund.txt', delimiter='\t')
+
+
     df['Mean-copy-number'] = df['Mean-copy-number'].str.extract('(\d+\.?\d*)').astype(float)
     mean_copy_number = df.groupby('Gn')['Mean-copy-number'].mean()
     std_copy_number = df.groupby('Gn')['Mean-copy-number'].std()
@@ -103,10 +106,43 @@ def your_api_endpoint(request):
     df.sort_values(by='Percentile_Rank', inplace=True)
     gene_product_data = df[['Gn', 'Percentile_Rank']].drop_duplicates().to_dict('records')
 
+    df = pd.read_csv('9606_abund.txt', delimiter='\t')
+    df_domains = pd.read_csv('9606_gn_dom.txt', delimiter='\t')
+    merged_df = pd.merge(df, df_domains, left_on='Gn', right_on='#Gn', how='left')
+
+    # Create a new column 'Combined_Gn' by merging 'Gn' and '#Gn' columns
+    merged_df['Gn'] = merged_df['Gn'].fillna(merged_df['#Gn'])
+
+    # Drop the 'Gn' and '#Gn' columns
+    merged_df = merged_df.drop(columns=['#Gn'])
+    # Convert 'Mean-copy-number' column to numeric data type
+    merged_df['Mean-copy-number'] = pd.to_numeric(merged_df['Mean-copy-number'], errors='coerce')
+
+    # Calculate the average abundance for each domain
+    average_abundance_by_domain = merged_df.groupby('Domain')['Mean-copy-number'].mean()
+    protein_stats = merged_df.groupby(['Ensembl_protein', 'Domain'])['Mean-copy-number'].agg(
+        ['mean', 'std']).reset_index()
+
+    # Create a DataFrame for mean values
+    mean_table = protein_stats[['Ensembl_protein', 'Domain', 'mean']].rename(columns={'mean': 'Mean'})
+
+    # Create a DataFrame for standard deviation values
+    std_table = protein_stats[['Ensembl_protein', 'Domain', 'std']].rename(columns={'std': 'Standard Deviation'})
+    mean_table_dict = mean_table.to_dict(orient='records')
+    std_table_dict = std_table.to_dict(orient='records')
+
+    # Find the domain with the highest average abundance
+    domain_with_highest_average_abundance = average_abundance_by_domain.idxmax()
+    highest_average_abundance = average_abundance_by_domain.max()
     response_data = {
         'unique_gene_copy_number_count': df[['Gn', 'Mean-copy-number']].drop_duplicates().shape[0],
         'copy_number_stats': copy_number_stats,
         'gene_product_data': gene_product_data,
+        'domain_with_highest_average_abundance': domain_with_highest_average_abundance,
+        'highest_average_abundance': highest_average_abundance,
+        # 'mean_table': mean_table_dict,
+        # 'std_table': std_table_dict,
+
     }
 
     return JsonResponse(response_data)

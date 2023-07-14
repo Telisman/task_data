@@ -80,6 +80,30 @@
                     });
                 }
             }
+            function fetchHighestAbundanceDomain() {
+                if ($('#highestAbundanceContainer').is(':visible')) {
+                    $('#highestAbundanceContainer').hide();
+                } else {
+                    $.ajax({
+                        url: "{% url 'your_api_endpoint' %}",
+                        dataType: "json",
+                        success: function(response) {
+                            // Hide all data containers
+                            $('.data-container').hide();
+
+                            // Update highest abundance domain and value
+                            $('#domainWithHighestAbundance').text(response.domain_with_highest_average_abundance);
+                            $('#highestAverageAbundance').text(response.highest_average_abundance);
+                            $('#highestAbundanceContainer').show();
+                        }
+                    });
+                }
+            }
+
+            // Button click event to fetch and display the domain with highest average abundance
+            $('#highestAbundanceButton').click(function() {
+                fetchHighestAbundanceDomain();
+            });
 
             // Button click event to fetch and display unique gene/copy-number values
             $('#uniqueValuesButton').click(function() {
@@ -133,5 +157,15 @@
             <tbody></tbody>
         </table>
     </div>
+
+ <h2>Highest Average Abundance</h2>
+<button id="highestAbundanceButton">Show/Hide Highest Average Abundance</button>
+<div id="highestAbundanceContainer" class="data-container" style="display: none;">
+    <h3>Domain with Highest Average Abundance: <span id="domainWithHighestAbundance"></span></h3>
+    <h3>Highest Average Abundance: <span id="highestAverageAbundance"></span></h3>
+</div>
+
+
+
 </body>
 </html>

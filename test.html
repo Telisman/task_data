@@ -81,6 +81,46 @@
                 }
             }
 
+            // Function to fetch and display the mean and standard deviation tables
+            function fetchMeanAndStdTables() {
+                if ($('#meanStdTablesContainer').is(':visible')) {
+                    $('#meanStdTablesContainer').hide();
+                } else {
+                    $.ajax({
+                        url: "{% url 'your_api_endpoint' %}",
+                        dataType: "json",
+                        success: function(response) {
+                            // Hide all data containers
+                            $('.data-container').hide();
+
+                            // Update mean table
+                            var meanTable = $('#mean_table tbody');
+                            meanTable.empty();
+                            $.each(response.mean_table, function(index, row) {
+                                var newRow = $('<tr>');
+                                $('<td>').text(row['Ensembl Protein']).appendTo(newRow);
+                                $('<td>').text(row.Domain).appendTo(newRow);
+                                $('<td>').text(row.Mean).appendTo(newRow);
+                                meanTable.append(newRow);
+                            });
+
+                            // Update standard deviation table
+                            var stdTable = $('#std_table tbody');
+                            stdTable.empty();
+                            $.each(response.std_table, function(index, row) {
+                                var newRow = $('<tr>');
+                                $('<td>').text(row['Ensembl Protein']).appendTo(newRow);
+                                $('<td>').text(row.Domain).appendTo(newRow);
+                                $('<td>').text(row['Standard Deviation']).appendTo(newRow);
+                                stdTable.append(newRow);
+                            });
+
+                            $('#meanStdTablesContainer').show();
+                        }
+                    });
+                }
+            }
+
             // Button click event to fetch and display unique gene/copy-number values
             $('#uniqueValuesButton').click(function() {
                 fetchUniqueValues();
@@ -94,6 +134,11 @@
             // Button click event to fetch and display gene product data
             $('#geneProductDataButton').click(function() {
                 fetchGeneProductData();
+            });
+
+            // Button click event to fetch and display mean and standard deviation tables
+            $('#meanStdTablesButton').click(function() {
+                fetchMeanAndStdTables();
             });
         });
     </script>
@@ -133,5 +178,68 @@
             <tbody></tbody>
         </table>
     </div>
-</body>
-</html>
+
+    <h2>Domain with Highest Abundance</h2>
+    <button id="domainAbundanceButton">Show/Hide Domain with Highest Abundance</button>
+    <div id="domainAbundanceContainer" class="data-container" style="display: none;">
+        <h3>Domain with highest average abundance: <span id="domain_with_highest_abundance"></span></h3>
+        <h3>Highest average abundance: <span id="highest_average_abundance"></span></h3>
+    </div>
+    <h2>Mean and Standard Deviation Tables</h2>
+<button id="meanStdTablesButton">Show/Hide Mean and Standard Deviation Tables</button>
+<div id="meanStdTablesContainer" class="data-container" style="display: none;">
+    <h3>Mean Table</h3>
+    <table id="mean_table">
+        <thead>
+            <tr>
+                <th>Ensembl Protein</th>
+                <th>Domain</th>
+                <th>Mean</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h3>Standard Deviation Table</h3>
+    <table id="std_table">
+        <thead>
+            <tr>
+                <th>Ensembl Protein</th>
+                <th>Domain</th>
+                <th>Standard Deviation</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Function to fetch and display the domain with the highest average abundance
+        function fetchDomainWithHighestAbundance() {
+            if ($('#domainAbundanceContainer').is(':visible')) {
+                $('#domainAbundanceContainer').hide();
+            } else {
+                $.ajax({
+                    url: "{% url 'your_api_endpoint' %}",
+                    dataType: "json",
+                    success: function(response) {
+                        // Hide all data containers
+                        $('.data-container').hide();
+
+                        // Update domain with highest average abundance
+                        $('#domain_with_highest_abundance').text(response.domain_with_highest_average_abundance);
+                        $('#highest_average_abundance').text(response.highest_average_abundance);
+                        $('#domainAbundanceContainer').show();
+                    }
+                });
+            }
+        }
+
+        // Button click event to fetch and display the domain with the highest average abundance
+        $('#domainAbundanceButton').click(function() {
+            fetchDomainWithHighestAbundance();
+        });
+    });
+</script>
+

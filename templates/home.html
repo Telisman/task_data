@@ -99,6 +99,37 @@
                     });
                 }
             }
+            function fetchMeanTable() {
+                if ($('#meanTableContainer').is(':visible')) {
+                    $('#meanTableContainer').hide();
+                } else {
+                    $.ajax({
+                        url: "{% url 'your_api_endpoint' %}",
+                        dataType: "json",
+                        success: function(response) {
+                            // Hide all data containers
+                            $('.data-container').hide();
+
+                            // Update mean table
+                            var meanTable = $('#mean_table tbody');
+                            meanTable.empty();
+                            $.each(response.mean_table, function(index, row) {
+                                var newRow = $('<tr>');
+                                $('<td>').text(row.Ensembl_protein).appendTo(newRow);
+                                $('<td>').text(row.Domain).appendTo(newRow);
+                                $('<td>').text(row.mean).appendTo(newRow);
+                                meanTable.append(newRow);
+                            });
+                            $('#meanTableContainer').show();
+                        }
+                    });
+                }
+            }
+
+            // Button click event to fetch and display the mean table
+            $('#meanTableButton').click(function() {
+                fetchMeanTable();
+            });
 
             // Button click event to fetch and display the domain with highest average abundance
             $('#highestAbundanceButton').click(function() {
@@ -165,7 +196,20 @@
     <h3>Highest Average Abundance: <span id="highestAverageAbundance"></span></h3>
 </div>
 
-
+<h2>Mean Table</h2>
+<button id="meanTableButton">Show/Hide Mean Table</button>
+<div id="meanTableContainer" class="data-container" style="display: none;">
+    <table id="mean_table">
+        <thead>
+            <tr>
+                <th>Ensembl Protein</th>
+                <th>Domain</th>
+                <th>Mean Copy Number</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 
 </body>
 </html>

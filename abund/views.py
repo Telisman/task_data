@@ -61,11 +61,18 @@ def your_api_endpoint(request):
 
 
     # Task B2
-    average_domain_representation = merged_df.groupby('Gn')['Mean-copy-number'].mean()
-    table1_mean = np.mean(average_domain_representation)
-    table1_std = np.std(average_domain_representation)
+    file1 = pd.read_csv('9606_abund.txt', delimiter='\t')
+    file2 = pd.read_csv('9606_gn_dom.txt', delimiter='\t')
+    file1.columns = file1.columns.str.strip('#')
+    file2.columns = file2.columns.str.strip('#')
+    # Convert the 'Mean-copy-number' column in file1 to numeric, replacing non-numeric values with NaN
+    file1['Mean-copy-number'] = pd.to_numeric(file1['Mean-copy-number'], errors='coerce')
+    # Remove rows with NaN values in the 'Mean-copy-number' column
+    file1 = file1.dropna(subset=['Mean-copy-number'])
+    merged_df = pd.merge(file1, file2, on='Gn')
+    domain_stats = merged_df.groupby('Gn')['Mean-copy-number'].agg(['mean', 'std'])
 
-    # print(copy_number_stats)
+    print(domain_stats)
     response_data = {
         'unique_gene_copy_number_count': df[['Gn', 'Mean-copy-number']].drop_duplicates().shape[0],
         'copy_number_stats': copy_number_stats,

@@ -7,71 +7,18 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
          <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
 
-    <script>
-        $(document).ready(function() {
-            // Function to fetch and display the unique gene/copy-number values
-            function fetchUniqueValues() {
-                if ($('#uniqueValuesContainer').is(':visible')) {
-                    $('#uniqueValuesContainer').hide();
-                } else {
-                    $.ajax({
-                        url: "{% url 'your_api_endpoint' %}",
-                        dataType: "json",
-                        success: function(response) {
-                            // Hide all data containers
-                            $('.data-container').hide();
-
-                            // Update unique gene/copy-number values
-                            $('#unique_gene_copy_number_count').text(response.unique_gene_copy_number_count);
-                            $('#uniqueValuesContainer').show();
-                        }
-                    });
-                }
-            }
-
-            function fetchHighestAbundanceDomain() {
-                if ($('#highestAbundanceContainer').is(':visible')) {
-                    $('#highestAbundanceContainer').hide();
-                } else {
-                    $.ajax({
-                        url: "{% url 'your_api_endpoint' %}",
-                        dataType: "json",
-                        success: function(response) {
-                            // Hide all data containers
-                            $('.data-container').hide();
-
-                            // Update highest abundance domain and value
-                            $('#domainWithHighestAbundance').text(response.domain_with_highest_average_abundance);
-                            $('#highestAverageAbundance').text(response.highest_average_abundance);
-                            $('#highestAbundanceContainer').show();
-                        }
-                    });
-                }
-            }
-
-
-            // Button click event to fetch and display the domain with highest average abundance
-            $('#highestAbundanceButton').click(function() {
-                fetchHighestAbundanceDomain();
-            });
-
-            // Button click event to fetch and display unique gene/copy-number values
-            $('#uniqueValuesButton').click(function() {
-                fetchUniqueValues();
-            });
-
-
-        });
-    </script>
 </head>
 <body>
+    <h3>Task A1</h3>
+    <h3>How many unique gene/copy-number values are in the file? (Single numerical value)</h3>
     <h2>Unique values</h2>
     <button id="uniqueValuesButton">Show/Hide Unique Values</button>
     <div id="uniqueValuesContainer" class="data-container" style="display: none;">
-        <h1>Unique gene/copy-number values: <span id="unique_gene_copy_number_count"></span></h1>
+        <h1>Unique values: <span id="unique_gene_copy_number_count"></span></h1>
     </div>
-
-   <h2>Copy Number Statistics</h2>
+    <h3> Task A2</h3>
+    <h3> Compute the mean and standard deviation of copy number for all unique human gene products/proteins (Table)</h3>
+    <h2>Mean and Standard deviation</h2>
     <button id="copyNumberStatsButton">Show/Hide Copy Number Statistics</button>
     <div id="copyNumberStatsContainer" class="data-container" style="display: none;">
 
@@ -91,8 +38,11 @@
             <button id="copy_number_stats_next_button">Next</button>
         </div>
     </div>
-
-    <h2>Gene Product Data</h2>
+    <h3>Task A3</h3>
+    <h3>Calculate the percentile rank (in terms of copy number ranks) for each gene product/protein.
+        (i.e. for Gene X, where is it in the ranks from top (0%) to bottom (100%) in terms of abundance) (Table)
+        </h3>
+    <h2>Gene Product Data:</h2>
     <button id="geneProductDataButton">Show/Hide Gene Product Data</button>
     <div id="geneProductDataContainer" class="data-container" style="display: none;">
 
@@ -112,7 +62,11 @@
         </div>
     </div>
 
- <h2>Highest Average Abundance</h2>
+
+    <h3>Task B1</h3>
+    <h3> What is the domain with the highest average abundance (i.e. across all copies of the domain in all gene
+        products/proteins)?  (single numerical value)</h3>
+    <h2>Highest Average Abundance</h2>
 <button id="highestAbundanceButton">Show/Hide Highest Average Abundance</button>
 <div id="highestAbundanceContainer" class="data-container" style="display: none;">
     <h3>Domain with Highest Average Abundance: <span id="domainWithHighestAbundance"></span></h3>

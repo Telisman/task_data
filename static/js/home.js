@@ -182,7 +182,7 @@
                     $('#uniqueValuesContainer').hide();
                 } else {
                     $.ajax({
-                        url: "{% url 'your_api_endpoint' %}",
+                        url: "/endpoint/",
                         dataType: "json",
                         success: function(response) {
                             // Hide all data containers
@@ -201,7 +201,61 @@
                     $('#highestAbundanceContainer').hide();
                 } else {
                     $.ajax({
-                        url: "{% url 'your_api_endpoint' %}",
+                        url: "/endpoint/",
+                        dataType: "json",
+                        success: function(response) {
+                            // Hide all data containers
+                            $('.data-container').hide();
+
+                            // Update highest abundance domain and value
+                            $('#domainWithHighestAbundance').text(response.domain_with_highest_average_abundance);
+                            $('#highestAverageAbundance').text(response.highest_average_abundance);
+                            $('#highestAbundanceContainer').show();
+                        }
+                    });
+                }
+            }
+
+
+            // Button click event to fetch and display the domain with highest average abundance
+            $('#highestAbundanceButton').click(function() {
+                fetchHighestAbundanceDomain();
+            });
+
+            // Button click event to fetch and display unique gene/copy-number values
+            $('#uniqueValuesButton').click(function() {
+                fetchUniqueValues();
+            });
+
+
+        });
+     $(document).ready(function() {
+            // Function to fetch and display the unique gene/copy-number values
+            function fetchUniqueValues() {
+                if ($('#uniqueValuesContainer').is(':visible')) {
+                    $('#uniqueValuesContainer').hide();
+                } else {
+                    $.ajax({
+                        url: "/endpoint/",
+                        dataType: "json",
+                        success: function(response) {
+                            // Hide all data containers
+                            $('.data-container').hide();
+
+                            // Update unique gene/copy-number values
+                            $('#unique_gene_copy_number_count').text(response.unique_gene_copy_number_count);
+                            $('#uniqueValuesContainer').show();
+                        }
+                    });
+                }
+            }
+
+            function fetchHighestAbundanceDomain() {
+                if ($('#highestAbundanceContainer').is(':visible')) {
+                    $('#highestAbundanceContainer').hide();
+                } else {
+                    $.ajax({
+                        url: "/endpoint/",
                         dataType: "json",
                         success: function(response) {
                             // Hide all data containers

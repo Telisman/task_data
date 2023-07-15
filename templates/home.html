@@ -5,68 +5,68 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-         <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
 
 </head>
 <body>
-    <h3>Task A1</h3>
-    <h3>How many unique gene/copy-number values are in the file? (Single numerical value)</h3>
-    <h2>Unique values</h2>
-    <button id="uniqueValuesButton">Show/Hide Unique Values</button>
-    <div id="uniqueValuesContainer" class="data-container" style="display: none;">
-        <h1>Unique values: <span id="unique_gene_copy_number_count"></span></h1>
+<h3>Task A1</h3>
+<h3>How many unique gene/copy-number values are in the file? (Single numerical value)</h3>
+<h2>Unique values</h2>
+<button id="uniqueValuesButton">Show/Hide Unique Values</button>
+<div id="uniqueValuesContainer" class="data-container" style="display: none;">
+    <h1>Unique values: <span id="unique_gene_copy_number_count"></span></h1>
+</div>
+<h3> Task A2</h3>
+<h3> Compute the mean and standard deviation of copy number for all unique human gene products/proteins (Table)</h3>
+<h2>Mean and Standard deviation</h2>
+<button id="copyNumberStatsButton">Show/Hide Copy Number Statistics</button>
+<div id="copyNumberStatsContainer" class="data-container" style="display: none;">
+
+    <table id="copy_number_stats_table">
+        <thead>
+        <tr>
+            <th>Gene</th>
+            <th>Mean Copy Number</th>
+            <th>Standard Deviation</th>
+        </tr>
+        </thead>
+        <tbody id="copy_number_stats_table_body"></tbody>
+    </table>
+
+    <div id="copy_number_stats_pagination" class="pagination-container">
+        <button id="copy_number_stats_prev_button">Previous</button>
+        <button id="copy_number_stats_next_button">Next</button>
     </div>
-    <h3> Task A2</h3>
-    <h3> Compute the mean and standard deviation of copy number for all unique human gene products/proteins (Table)</h3>
-    <h2>Mean and Standard deviation</h2>
-    <button id="copyNumberStatsButton">Show/Hide Copy Number Statistics</button>
-    <div id="copyNumberStatsContainer" class="data-container" style="display: none;">
+</div>
+<h3>Task A3</h3>
+<h3>Calculate the percentile rank (in terms of copy number ranks) for each gene product/protein.
+    (i.e. for Gene X, where is it in the ranks from top (0%) to bottom (100%) in terms of abundance) (Table)
+</h3>
+<h2>Gene Product Data:</h2>
+<button id="geneProductDataButton">Show/Hide Gene Product Data</button>
+<div id="geneProductDataContainer" class="data-container" style="display: none;">
 
-        <table id="copy_number_stats_table">
-            <thead>
-                <tr>
-                    <th>Gene</th>
-                    <th>Mean Copy Number</th>
-                    <th>Standard Deviation</th>
-                </tr>
-            </thead>
-            <tbody id="copy_number_stats_table_body"></tbody>
-        </table>
+    <table id="gene_product_data_table">
+        <thead>
+        <tr>
+            <th>Gene</th>
+            <th>Percentile Rank</th>
+        </tr>
+        </thead>
+        <tbody id="gene_product_data_table_body"></tbody>
+    </table>
 
-        <div id="copy_number_stats_pagination" class="pagination-container">
-            <button id="copy_number_stats_prev_button">Previous</button>
-            <button id="copy_number_stats_next_button">Next</button>
-        </div>
+    <div id="gene_product_data_pagination" class="pagination-container">
+        <button id="gene_product_data_prev_button">Previous</button>
+        <button id="gene_product_data_next_button">Next</button>
     </div>
-    <h3>Task A3</h3>
-    <h3>Calculate the percentile rank (in terms of copy number ranks) for each gene product/protein.
-        (i.e. for Gene X, where is it in the ranks from top (0%) to bottom (100%) in terms of abundance) (Table)
-        </h3>
-    <h2>Gene Product Data:</h2>
-    <button id="geneProductDataButton">Show/Hide Gene Product Data</button>
-    <div id="geneProductDataContainer" class="data-container" style="display: none;">
-
-        <table id="gene_product_data_table">
-            <thead>
-                <tr>
-                    <th>Gene</th>
-                    <th>Percentile Rank</th>
-                </tr>
-            </thead>
-            <tbody id="gene_product_data_table_body"></tbody>
-        </table>
-
-        <div id="gene_product_data_pagination" class="pagination-container">
-            <button id="gene_product_data_prev_button">Previous</button>
-            <button id="gene_product_data_next_button">Next</button>
-        </div>
-    </div>
+</div>
 
 
-    <h3>Task B1</h3>
-    <h3> What is the domain with the highest average abundance (i.e. across all copies of the domain in all gene
-        products/proteins)?  (single numerical value)</h3>
-    <h2>Highest Average Abundance</h2>
+<h3>Task B1</h3>
+<h3> What is the domain with the highest average abundance (i.e. across all copies of the domain in all gene
+    products/proteins)? (single numerical value)</h3>
+<h2>Highest Average Abundance</h2>
 <button id="highestAbundanceButton">Show/Hide Highest Average Abundance</button>
 <div id="highestAbundanceContainer" class="data-container" style="display: none;">
     <h3>Domain with Highest Average Abundance: <span id="domainWithHighestAbundance"></span></h3>
@@ -75,5 +75,5 @@
 
 
 </body>
- <script src="{% static 'js/home.js' %}"></script>
+<script src="{% static 'js/home.js' %}"></script>
 </html>

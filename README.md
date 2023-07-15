@@ -27,13 +27,7 @@ Before running the web app, make sure you have the following installed:
 
 3. Install the required dependencies:
 
-<<<<<<< HEAD
     pip install -r requirements.txt or just start venv\Scripts\activate in your terminal.
-=======
-    pip install -r requirements.txt
->>>>>>> origin/master
-
-
 
 ## Usage
 
